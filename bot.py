@@ -10,25 +10,16 @@ from discord import Message
 
 print(r'''
     clear
-    echo -e "${CYAN}"
-    echo -e "    ${RED}██╗  ██╗ █████╗ ███████╗ █████╗ ███╗   ██╗${NC}"
-    echo -e "    ${GREEN}██║  ██║██╔══██╗██╔════╝██╔══██╗████╗  ██║${NC}"
-    echo -e "    ${BLUE}███████║███████║███████╗███████║██╔██╗ ██║${NC}"
-    echo -e "    ${YELLOW}██╔══██║██╔══██║╚════██║██╔══██║██║╚██╗██║${NC}"
-    echo -e "    ${MAGENTA}██║  ██║██║  ██║███████║██║  ██║██║ ╚████║${NC}"
-    echo -e "    ${CYAN}╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝${NC}"
-    echo -e "${BLUE}=======================================================${NC}"
-    echo -e "${GREEN}            🚀 Naptha Node Management 🚀${NC}"
     echo -e "${BLUE}=======================================================${NC}"
     echo -e "${CYAN}    🌐  Telegram: @CryptoAirdropHindi${NC}"
     echo -e "${CYAN}    📺  YouTube:  @CryptoAirdropHindi6${NC}"
     echo -e "${CYAN}    💻  GitHub:   github.com/CryptoAirdropHindi${NC}")
 
-# === Konfigurasi ===
-DISCORD_USER_TOKEN = "TOKEN_DISCORD" #ganti dengan TOKEN discord
-CHANNEL_ID = 12345  # Ganti dengan ID channel yang kamu targetkan
-INTERVAL_MIN = 5 #random time minimal
-INTERVAL_MAX = 9 #random time maksimal
+# === Configuration ===
+DISCORD_USER_TOKEN = "TOKEN_DISCORD" 
+CHANNEL_ID = 12345  
+INTERVAL_MIN = 5 
+INTERVAL_MAX = 9 
 OLLAMA_URL = "http://localhost:11434"
 OLLAMA_MODEL = "gemma:2b"
 
@@ -37,10 +28,10 @@ next_reply_time = datetime.now()
 pending_message = None
 has_printed_wait = False
 
-# Inisialisasi client sebagai selfbot
+# Initialize client as selfbot
 client = commands.Bot(command_prefix="!", self_bot=True)
 
-# === Fungsi ambil jawaban dari AI lokal (Ollama) ===
+# === Function to get answer from local AI (Ollama) ===
 async def get_ai_reply(prompt):
     try:
         crypto_prompt = (
@@ -63,14 +54,14 @@ async def get_ai_reply(prompt):
         print(f"[❌] Error Ollama: {e}")
         return "have a nice day"
 
-# === Event ketika bot siap ===
+# === Event when the bot is ready ===
 @client.event
 async def on_ready():
-    print(f"[✅] Login sebagai {client.user} (akun pribadi aktif)")
+    print(f"[✅] Login sebagai {client.user} (active personal account)")
     reply_loop.start()
     auto_restart.start()
 
-# === Event ketika pesan baru diterima ===
+# === Event when a new message is received ===
 @client.event
 async def on_message(message: Message):
     global pending_message
@@ -99,7 +90,7 @@ async def reply_loop():
             has_printed_wait = True
         return
 
-    # Kalau sudah waktunya balas, reset flag agar bisa print lagi next interval
+    # When it's time to reply, reset flag agar bisa print lagi next interval
     has_printed_wait = False
 
     reply = await get_ai_reply(pending_message.content)
@@ -119,7 +110,7 @@ async def reply_loop():
         next_reply_time = datetime.now() + timedelta(minutes=1)
         return
 
-    # === Kirim jika lolos filter ===
+    # === Send if it passes the filter ===
     try:
         if random.choice([True, False]):
             content = f"{pending_message.author.mention} {reply}"
@@ -148,5 +139,5 @@ async def before_auto_restart():
     print(f"[⏳] Script akan auto restart 2 jam sekali")
     await asyncio.sleep(2 * 60 * 60)  # 3 jam delay sebelum loop pertama
 
-# === Jalankan bot ===
+# === Run the bot ===
 client.run(DISCORD_USER_TOKEN)
