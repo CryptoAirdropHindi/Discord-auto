@@ -1,4 +1,3 @@
-# Discord-auto-with-AI From Airdrop Sambil Rebahan
 
 # sistem Requarements
 - 4 core cpu
