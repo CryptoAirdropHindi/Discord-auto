@@ -57,6 +57,9 @@ pip uninstall discord discord.py discord.py-self -y
 pip install git+https://github.com/dolfies/discord.py-self@71609f4f62649d18bdf14f0e286b7e62bc605390
 ```
 **book script**
+
+click -> F12 -> Go to messages -> click Request headers -> authorization USER_TOKEN
+
 ```
 nano bot.py
 ```
