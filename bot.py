@@ -8,12 +8,13 @@ from datetime import datetime, timedelta
 from discord.ext import tasks, commands
 from discord import Message
 
+# Print banner
 print(r'''
-    clear
-    echo -e "${BLUE}=======================================================${NC}"
-    echo -e "${CYAN}    🌐  Telegram: @CryptoAirdropHindi${NC}"
-    echo -e "${CYAN}    📺  YouTube:  @CryptoAirdropHindi6${NC}"
-    echo -e "${CYAN}    💻  GitHub:   github.com/CryptoAirdropHindi${NC}")
+=======================================================
+    🌐  Telegram: @CryptoAirdropHindi
+    📺  YouTube:  @CryptoAirdropHindi6
+    💻  GitHub:   github.com/CryptoAirdropHindi
+''')
 
 # === Configuration ===
 DISCORD_USER_TOKEN = "TOKEN_DISCORD" 
@@ -35,7 +36,7 @@ client = commands.Bot(command_prefix="!", self_bot=True)
 async def get_ai_reply(prompt):
     try:
         crypto_prompt = (
-            "You’re a laid-back friend replying casually and briefly. "
+            "You're a laid-back friend replying casually and briefly. "
             "Keep it simple, chill, and natural — no extra stuff, no emojis, no repeats. "
             "Sometimes say 'yeah', 'true', or 'same', but keep it random and real.\n\n"
             f"Message: {prompt}\n"
@@ -70,7 +71,7 @@ async def on_message(message: Message):
     if message.author.id == client.user.id:
         return
 
-    # print(f"[📥] Pesan dari {message.author.name}: {message.content}")
+    print(f"[📥] Pesan dari {message.author.name}: {message.content}")
     pending_message = message
 
 # === Loop interval kirim balasan ===
@@ -93,7 +94,6 @@ async def reply_loop():
     # When it's time to reply, reset flag agar bisa print lagi next interval
     has_printed_wait = False
 
-    reply = await get_ai_reply(pending_message.content)
     reply = await get_ai_reply(pending_message.content)
 
     # === Filtering respons AI yang tidak layak dikirim ===
@@ -131,13 +131,14 @@ async def reply_loop():
 async def auto_restart():
     print(f"[♻️] Restart otomatis dimulai pada {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     python = sys.executable
-    os.execv(python, [python] + sys.argv)
+    os.execl(python, python, *sys.argv)
 
 @auto_restart.before_loop
 async def before_auto_restart():
     await client.wait_until_ready()
     print(f"[⏳] Script akan auto restart 2 jam sekali")
-    await asyncio.sleep(2 * 60 * 60)  # 3 jam delay sebelum loop pertama
+    await asyncio.sleep(2 * 60 * 60)  # 2 jam delay sebelum loop pertama
 
 # === Run the bot ===
-client.run(DISCORD_USER_TOKEN)
+if __name__ == "__main__":
+    client.run(DISCORD_USER_TOKEN)
